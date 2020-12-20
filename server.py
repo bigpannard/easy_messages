@@ -57,8 +57,8 @@ class Server:
     
         
     
-def test(*args):
-    print("New message to treat {}, {}".format(args[0],args[1]))
+def test(addresse, message, historique_Message):
+    print(f"New message to treat {addresse}, {message} {historique_Message}")
 
 
 if __name__ == "__main__":
