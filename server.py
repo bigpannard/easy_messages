@@ -12,12 +12,30 @@ class Server:
         self.ip_address = ip_address
         self.port = port
         self.MessageReceived_handler = None
-        self.MessageCheck_handler = None
+        self.__MessageCheck_handler = None
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.__socket.bind((self.ip_address,self.port))
         #dictionnary to know who (ipaddress) what message is sent [ipaddresse]:[message]
         self.__dict_data = {}
     
+    @property
+    def MessageReceived_handler(self):
+        """Event handler used to send the message from the client.
+
+        Returns:
+            [function]: function should have 3 parameters : addr (tuple client IP and client port),  msg string message, list of message from client
+        """
+        return self.__MessageCheck_handler
+
+    @MessageReceived_handler.setter
+    def MessageReceived_handler(self, value):
+        """Event handler used to send the message from the client.
+
+        Args:
+            value (function): function should have 3 parameters : addr (tuple client IP and client port),  msg string message, list of message from client
+        """
+        self.__MessageCheck_handler = value
+
     def __get_message_from_socket(self, msg_length, conn):
         total_received = 0
         chunks = []
@@ -66,6 +84,9 @@ class Server:
         conn.close()
 
     def start(self):
+        """[summary]
+        Start the server into an loop
+        """
         self.__socket.listen()
         print(f"[LISTENING] Server is listening on {self.ip_address}")
         while True:
