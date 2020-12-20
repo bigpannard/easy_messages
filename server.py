@@ -1,6 +1,5 @@
 import socket
 import threading
-import time
 
 class Server:
     DEFAULT_BUFFER_SIZE = 64
@@ -16,7 +15,7 @@ class Server:
         #dictionnary to know who (ipaddress) what message is sent [ipaddresse]:[message]
         self.__dict_data = {}
     
-    def __get_message(self, msg_length, conn):
+    def __get_message_from_socket(self, msg_length, conn):
         total_received = 0
         chunks = []
         while total_received < msg_length:
@@ -35,7 +34,7 @@ class Server:
             msg_length = conn.recv(Server.DEFAULT_BUFFER_SIZE).decode(Server.FORMAT)
             if msg_length:
                 msg_length = int(msg_length)
-                msg = self.__get_message(msg_length,conn)
+                msg = self.__get_message_from_socket(msg_length,conn)
                                
                 if msg == Server.DISCONNECT_MESSAGE:
                     connected = False
