@@ -76,8 +76,8 @@ class Server:
     
         
     
-def manage_message(addresse, message, historique_Message):
-    print(f"New message to treat {addresse}, {message} {historique_Message}")
+def manage_message(address, msg, all_msg):
+    print(f"New message to treat {address}, {msg} {all_msg}")
 
 def check_message(address, msg):
     if msg.startswith("TOTO"):
