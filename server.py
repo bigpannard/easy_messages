@@ -1,17 +1,19 @@
 import socket
 import threading
+import time
 
 class Server:
-    HEADER = 64
+    DEFAULT_BUFFER_SIZE = 64
     FORMAT = 'utf-8'
-    DISCONNECT_MESSAGE = '!DISCONNECT'
+    DISCONNECT_MESSAGE = '!DISCONNECT' 
     
     def __init__(self, ip_address, port):
         self.ip_address = ip_address
         self.port = port
-        self.MessageReceived = None
+        self.MessageReceived_handler = None
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.__socket.bind((self.ip_address,self.port))
+        #dictionnary to know who (ipaddress) what message is sent
         self.__dict_data = {}
     
     def __handle_connection(self, conn, addr):
@@ -19,7 +21,7 @@ class Server:
 
         connected = True
         while connected:
-            msg_length = conn.recv(Server.HEADER).decode(Server.FORMAT)
+            msg_length = conn.recv(Server.DEFAULT_BUFFER_SIZE).decode(Server.FORMAT)
             if msg_length:
                 msg_length = int(msg_length)
                 total_received = 0
@@ -38,8 +40,9 @@ class Server:
                     if addr[0] not in self.__dict_data:
                         self.__dict_data[addr[0]] = list()
                     self.__dict_data[addr[0]].append(msg)
-                    if self.MessageReceived:
-                        self.MessageReceived(addr, msg, self.__dict_data[addr[0]])
+                    if self.MessageReceived_handler:
+                        thread = threading.Thread(target=self.MessageReceived_handler, args=(addr, msg,self.__dict_data[addr[0]]))
+                        thread.start()
 
                 conn.send("Msg OK".encode(Server.FORMAT))
         
@@ -59,9 +62,11 @@ class Server:
     
 def manage_message(addresse, message, historique_Message):
     print(f"New message to treat {addresse}, {message} {historique_Message}")
+    time.sleep(10)
+    print("end")
 
 
 if __name__ == "__main__":
     serveur = Server("192.168.0.7", 5050)
-    serveur.MessageReceived = manage_message
+    serveur.MessageReceived_handler = manage_message
     serveur.start()
