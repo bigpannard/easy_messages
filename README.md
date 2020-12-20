@@ -11,3 +11,7 @@ the message will be encoded in UTF-8.
 The server get the message length and read the socket to get all message. 
 * if MessageCheck_handler is set into the server a validation occured. By default no check all message is validated 
 * if MessageReceived_handler is set into the server an event into a thread is raised 
+
+<p align="center">
+<img src="server_client_socket.jpg" alt="schema">
+</p>
