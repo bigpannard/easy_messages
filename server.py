@@ -57,11 +57,11 @@ class Server:
     
         
     
-def test(addresse, message, historique_Message):
+def manage_message(addresse, message, historique_Message):
     print(f"New message to treat {addresse}, {message} {historique_Message}")
 
 
 if __name__ == "__main__":
     serveur = Server("192.168.0.7", 5050)
-    serveur.MessageReceived = test
+    serveur.MessageReceived = manage_message
     serveur.start()
