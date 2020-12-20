@@ -9,3 +9,5 @@ When a client want to send a message to the server. The client class calculate t
 the message will be encoded in UTF-8. 
 
 The server get the message length and read the socket to get all message. 
+if MessageCheck_handler is set into the server a validation occured. By default no check all message is validated 
+if MessageReceived_handler is set into the server an event into a thread is raised 
