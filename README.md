@@ -5,7 +5,7 @@ Create an instance of Server with your IpAdresse and an available port
 and wait a client connection 
 
 ## how does it works
-When a client want to send a message to the server. The client class calculate the length of the message and send it to the server to directly send the message.
+When a client want to send a message to the server. The client class calculate the length of the message and send it to the server and directly send the message.
 the message will be encoded in UTF-8. 
 
 The server get the message length and read the socket to get all message. 
