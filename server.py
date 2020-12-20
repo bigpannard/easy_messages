@@ -4,12 +4,15 @@ import threading
 class Server:
     DEFAULT_BUFFER_SIZE = 64
     FORMAT = 'utf-8'
-    DISCONNECT_MESSAGE = '!DISCONNECT' 
+    DISCONNECT_MESSAGE = '!DISCONNECT'
+    MSG_OK = "Msg OK".encode(FORMAT) 
+    MSG_NOK = "Msg NOK".encode(FORMAT)
     
     def __init__(self, ip_address, port):
         self.ip_address = ip_address
         self.port = port
         self.MessageReceived_handler = None
+        self.MessageCheck_handler = None
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.__socket.bind((self.ip_address,self.port))
         #dictionnary to know who (ipaddress) what message is sent [ipaddresse]:[message]
@@ -38,18 +41,26 @@ class Server:
                                
                 if msg == Server.DISCONNECT_MESSAGE:
                     connected = False
+                    conn.send(Server.MSG_OK)
                 else:
-                    if addr[0] not in self.__dict_data:
-                        self.__dict_data[addr[0]] = list()
-                    self.__dict_data[addr[0]].append(msg)
+                    message_validate = True
+                    if self.MessageCheck_handler:
+                        message_validate = self.MessageCheck_handler(addr, msg)
 
-                    #if someone get the handler we sent it into new thread
-                    if self.MessageReceived_handler:
-                        thread = threading.Thread(target=self.MessageReceived_handler, args=(addr, msg,self.__dict_data[addr[0]]))
-                        thread.start()
-                
-                #check the message to return msg OK or NOT or else
-                conn.send("Msg OK".encode(Server.FORMAT))
+                    if message_validate:
+                        if addr[0] not in self.__dict_data:
+                            self.__dict_data[addr[0]] = list()
+                        self.__dict_data[addr[0]].append(msg)
+
+
+                        #if someone get the handler we sent it into new thread
+                        if self.MessageReceived_handler:
+                            thread = threading.Thread(target=self.MessageReceived_handler, args=(addr, msg,self.__dict_data[addr[0]]))
+                            thread.start()
+                        
+                        conn.send(Server.MSG_OK)
+                    else:
+                            conn.send(Server.MSG_NOK)
         
         print(f"[CLOSE CONNECTION] {addr}")
         conn.close()
@@ -68,8 +79,15 @@ class Server:
 def manage_message(addresse, message, historique_Message):
     print(f"New message to treat {addresse}, {message} {historique_Message}")
 
+def check_message(address, msg):
+    if msg.startswith("TOTO"):
+        return True
+    else:
+        return False
+
 
 if __name__ == "__main__":
     serveur = Server("192.168.0.7", 5050)
     serveur.MessageReceived_handler = manage_message
+    serveur.MessageCheck_handler = check_message
     serveur.start()

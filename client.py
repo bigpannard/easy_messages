@@ -25,5 +25,6 @@ class Client:
 
 if __name__ == "__main__":
     client = Client("192.168.0.7", 5050)
+    print(client.send("TOTOcoucou"))
     print(client.send("coucou"))
     print(client.disconnect())
