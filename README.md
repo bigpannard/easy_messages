@@ -1,22 +1,64 @@
 # Socket Server and Client
-Is a simple class to allow the management of sending message from a client to a server. 
+Is a simple class to allow the management of sending message from a client to a server and client cas ask to receive his messages from the server 
+
+## Server Side
 
 Create an instance of Server with your IpAdresse and an available port
 and wait a client connection 
 
-## how does it works
-When a client want to send a message to the server. The client class calculate the length of the message and send it to the server and directly send the message.
-the message will be encoded in UTF-8. 
+The server can link 3 handler:
+* MessageCheck_handler : If you link this handler, it's possible to implement your check. This handler return a boolean to validate the message and manage 2 arguments:
+    * address: tuple value contains ip adresse and connect port to respond
+    * message: Message object who should checked
 
-The server get the message length and read the socket to get all the message. By default no check is done on the message and the message is store into a dictionnary {IP:[Message]} 
-* if MessageCheck_handler is set into the server a validation occured. It's your own logical into a method with 2 parameters will be created
-    * address : a tuple with ClientIP and Port 
-    * msg : string with the content of the message
-* if MessageReceived_handler is set into the server, an event into a thread is raised. To implement your message treatement link your method with 3 parameters : 
-    * address : a tuple with Client IP and Port
-    * msg : string with the content of the message 
-    * all_msg : a list of message
+```python
+def message_check (address, message):
+    # Implement your own check return true of false
+    # by default it's always true
+    if message.message.startswith("<EXP>"):
+        return True
+    return False
 
+serveur = Server("192.168.0.10", 5050)
+serveur.MessageCheck_handler = message_check
+serveur.start()
+```
+
+* MessageReceived_handler: If you link this handler, you receive the message when the server catch it. This handler return nothing adn manage 2 arguments:
+    * address: tuple value contains ip adresse and connect port to respond
+    * message: Message object who should checked
+
+```python
+def message_received (address, message):
+    # Implement your own processing of message
+    print(f"New message to treat from {address}\n\t entity:{message.entity}\n\t category:{message.category}\n\t message:{message.message}")
+    
+
+serveur = Server("192.168.0.10", 5050)
+serveur.MessageReceived_handler = message_received 
+serveur.start()
+```
+
+* MessageSendToClient_handler: If you link this handler, the server will be able to send message at client when the client ask it. This handler return a list of Message instance and manage 3 arguments:
+    * address: tuple value contains ip adresse and connect port to respond
+    * entity: entity set to the message to allow to identify the messages to send (can be None)
+    * category: category set to the message to allow to identify the messages to send (can be None)
+
+
+```python
+def message_received (address, message):
+    # Implement your own processing of message
+    print(f"New message to treat from {address}\n\t entity:{message.entity}\n\t category:{message.category}\n\t message:{message.message}")
+    
+
+serveur = Server("192.168.0.10", 5050)
+serveur.MessageReceived_handler = message_received 
+serveur.start()
+```
 <p align="center">
-<img src="server_client_socket.jpg" alt="schema">
+<img src="img/server_side.jpg" alt="schema">
 </p>
+
+
+
+

@@ -121,7 +121,7 @@ class Server:
             
             #TODO check if we need to create thread we don't need to stop the communication with the client 
             if self.__MessageReceived_handler:
-                 self.__MessageReceived_handler(addr, msg)
+                 self.__MessageReceived_handler(addr, msg.entity, msg.category)
 
         return True
     def __server_message_treat_msg_ok(self, socket, addr, msg):
@@ -166,8 +166,8 @@ class Server:
             set_log(f"[ACTIVE CONNECTIONS] {threading.activeCount() -1}",level=Logging_level.info)
         set_log(f"[STOP] Server is stopped",level=Logging_level.info)
     
-def manage_message(address, msg):
-    print(f"New message to treat {address}, category:{msg.category} message:{msg.message}")
+def manage_message(address, message):
+    print(f"New message to treat from {address}\n\t entity:{message.entity}\n\t category:{message.category}\n\t message:{message.message}")
 
 def check_message(address, msg):
     if msg.message.startswith("TOTO"):
@@ -175,11 +175,11 @@ def check_message(address, msg):
     else:
         return False
 
-def message_send_to_client(addr, last_msg):
-    if last_msg and last_msg.entity == "Manu":
+def message_send_to_client(addr, entity, category):
+    if entity == "Manu":
         mess = []
         for i in range(5):
-            mess.append( Message(f"{i} c'est bien !!!!"))
+            mess.append(Message(f"{i} c'est bien !!!!"))
         return mess
 
 
