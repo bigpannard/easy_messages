@@ -1,10 +1,10 @@
 import socket
 
 from message import IntMessage,Message,ServerMessage,ServerMessageEnum
-from server import DEFAULT_BUFFER_SIZE, get_json_message_from_socket
+from easy_server import DEFAULT_BUFFER_SIZE, get_json_message_from_socket
 
 
-class Client:   
+class EasyClient:   
     def __init__(self, ip_address, port, entity="Default", category=None):
         self.ip_address = ip_address
         self.port = port
@@ -66,8 +66,8 @@ class Client:
         
 
 if __name__ == "__main__":
-    client = Client("192.168.0.7", 5050,entity="Manu")
-    msg = client.send(Message(message="TOTOBonjour serveur c'est Manu",entity="Manu",category="Admin"))
+    client = EasyClient("localhost", 5050,entity="Manu")
+    msg = client.send(Message(message="<ADD_PL>Bonjour serveur c'est Manu",entity="Manu",category="Admin"))
     print(msg.message)
     client.get_messsages()
     msg = client.disconnect()

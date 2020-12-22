@@ -20,7 +20,7 @@ def get_json_message_from_socket(msg_length, socket):
     set_log(f"get_json_message_from_socket RETURN [{msg}] - socket {socket}",level=Logging_level.debug)
     return msg
 
-class Server:   
+class EasyServer:   
     def __init__(self, ip_address, port):
         self.ip_address = ip_address
         self.port = port
@@ -95,6 +95,8 @@ class Server:
                     socket.send(m.encode())
             else:
                 socket.send(ServerMessage(server_message_enum=ServerMessageEnum.NO_MESSAGE,buffer_size=DEFAULT_BUFFER_SIZE).encode())
+        else:
+            socket.send(ServerMessage(server_message_enum=ServerMessageEnum.NO_MESSAGE,buffer_size=DEFAULT_BUFFER_SIZE).encode())
         return True
     def __server_message_treat_send_mess(self, socket, addr, msg):
         """Private method to manage message from client. The protocal : 
@@ -114,14 +116,17 @@ class Server:
         if msg:
             msg = IntMessage.decode(msg)
             msg = Message.decode(get_json_message_from_socket(msg.int_value,socket=socket))
-            if self.__MessageCheck_handler and self.__MessageCheck_handler(addr, msg):
-                socket.send(ServerMessage(server_message_enum=ServerMessageEnum.MSG_OK,buffer_size=DEFAULT_BUFFER_SIZE).encode())
-            else:
-                socket.send(ServerMessage(server_message_enum=ServerMessageEnum.MSG_NOK,buffer_size=DEFAULT_BUFFER_SIZE).encode())
+            msg_check = True
+            if self.__MessageCheck_handler:
+                msg_check = self.__MessageCheck_handler(addr, msg)
+                if msg_check:
+                    socket.send(ServerMessage(server_message_enum=ServerMessageEnum.MSG_OK,buffer_size=DEFAULT_BUFFER_SIZE).encode())
+                else:
+                    socket.send(ServerMessage(server_message_enum=ServerMessageEnum.MSG_NOK,buffer_size=DEFAULT_BUFFER_SIZE).encode())
             
             #TODO check if we need to create thread we don't need to stop the communication with the client 
-            if self.__MessageReceived_handler:
-                 self.__MessageReceived_handler(addr, msg.entity, msg.category)
+            if self.__MessageReceived_handler and msg_check:
+                 self.__MessageReceived_handler(addr, msg)
 
         return True
     def __server_message_treat_msg_ok(self, socket, addr, msg):
@@ -184,7 +189,7 @@ def message_send_to_client(addr, entity, category):
 
 
 if __name__ == "__main__":
-    serveur = Server("192.168.0.7", 5050)
+    serveur = EasyServer("192.168.0.7", 5050)
     serveur.MessageReceived_handler = manage_message
     serveur.MessageCheck_handler = check_message
     serveur.MessageSendToClient_handler = message_send_to_client

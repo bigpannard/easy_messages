@@ -3,7 +3,7 @@ Is a simple class to allow the management of sending message from a client to a 
 
 ## Server Side
 
-Create an instance of Server with your IpAdresse and an available port
+Create an instance of EasyServer with your IpAdresse and an available port
 and wait a client connection 
 
 The server can link 3 handler:
