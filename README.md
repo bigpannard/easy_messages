@@ -1,5 +1,5 @@
-# Socket Server and Client
-Is a simple class to allow the management of sending message from a client to a server and client cas ask to receive his messages from the server 
+# Easy Messages
+Is a simple class to allow the management of sending message from a client to a server and client can ask to receive his messages from the server.
 
 ## Server Side
 
