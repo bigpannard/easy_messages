@@ -50,17 +50,10 @@ class BaseMessage:
     @classmethod
     def decode(cls, json_data: bytes):
         dic = json.loads(json_data)
-        message = ent = cat = buf = None
-        # TODO get direct value + create methode with dictionary for child
-        for key, value in dic.items():
-            if key == "msg":
-                message = value
-            elif key == "ent":
-                ent = value
-            elif key == "cat":
-                cat = value
-            elif key == "buf":
-                buf = value
+        message = dic.get("msg")
+        ent = dic.get("ent")
+        cat = dic.get("cat")
+        buf = dic.get("buf")
         return cls(message=message, entity=ent, category=cat, buffer_size=buf)
 
     def create_dictionary(self):
