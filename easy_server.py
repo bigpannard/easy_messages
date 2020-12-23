@@ -213,7 +213,7 @@ def message_send_to_client(address, entity, category):
 
 if __name__ == "__main__":
     s = EasyServer("localhost", 5050)
-    s.MessageReceived_handler = manage_message
-    s.MessageCheck_handler = check_message
-    s.MessageSendToClient_handler = message_send_to_client
+    s.message_received_handler = manage_message
+    s.message_check_handler = check_message
+    s.message_send_to_client_handler = message_send_to_client
     s.start()
