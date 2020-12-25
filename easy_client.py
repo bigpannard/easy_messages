@@ -1,6 +1,6 @@
 import socket
 
-from message import IntMessage,Message,ServerMessage,ServerMessageEnum
+from easy_message import IntMessage, Message, ServerMessage,  ServerMessageEnum
 from easy_server import DEFAULT_BUFFER_SIZE, get_json_message_from_socket
 
 
@@ -15,12 +15,16 @@ class EasyClient:
 
     def __read_message(self, length):
         return Message.decode(get_json_message_from_socket(msg_length=length,socket=self.__socket))
+
     def __read_int_message(self):
         return IntMessage.decode(get_json_message_from_socket(DEFAULT_BUFFER_SIZE,socket=self.__socket))
+
     def __read_server_message(self):
         return ServerMessage.decode(get_json_message_from_socket(DEFAULT_BUFFER_SIZE,socket=self.__socket))
+
     def __send(self, message):
         self.__socket.send(message.encode())
+
     def __send_message(self, msg):
         imsg = IntMessage(int_value=msg.length,buffer_size=DEFAULT_BUFFER_SIZE,entity=msg.entity)
         self.__send(imsg)
@@ -63,7 +67,6 @@ class EasyClient:
         self.__send(ServerMessage(server_message_enum=ServerMessageEnum.DISCONNECT_MESSAGE,buffer_size=DEFAULT_BUFFER_SIZE, entity=self.__entity, category=self.__category))
         return self.__read_server_message()
 
-        
 
 if __name__ == "__main__":
     client = EasyClient("localhost", 5050,entity="Manu")
@@ -73,3 +76,5 @@ if __name__ == "__main__":
     msg = client.disconnect()
     print(msg.message)
     input()
+    
+    mess = IntMessage(int_value=18, buffer_size=128,  entity="Manu", category="admin")

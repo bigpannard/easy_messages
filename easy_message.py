@@ -181,9 +181,9 @@ if __name__ == "__main__":
     msg2 = IntMessage.decode(enc)
     print(msg2.message)
 
-    msg = Message(message="fdsklfmjqsdfklqdmsjfqsdklfmqsdjfkqlsdmfjqsklmqsdjfqsdlmfdsklfmjqsdfklqdmsjfqsdklfmqsdjfkqlsdmfjqsklmqsdjfqsdlmfdsklfmjqsdfklqdmsjfqsdklfmqsdjfkqlsdmfjqsklmqsdjfqsdlmfdsklfmjqsdfklqdmsjfqsdklfmqsdjfkqlsdmfjqsklmqsdjfqsdlm")
+    msg = EasyMessage(message="fdsklfmjqsdfklqdmsjfqsdklfmqsdjfkqlsdmfjqsklmqsdjfqsdlmfdsklfmjqsdfklqdmsjfqsdklfmqsdjfkqlsdmfjqsklmqsdjfqsdlmfdsklfmjqsdfklqdmsjfqsdklfmqsdjfkqlsdmfjqsklmqsdjfqsdlmfdsklfmjqsdfklqdmsjfqsdklfmqsdjfkqlsdmfjqsklmqsdjfqsdlm")
     print(msg.length)
     enc = msg.encode()
     print(enc)
-    msg2 = Message.decode(enc)
+    msg2 = EasyMessage.decode(enc)
     print(msg2.message)
