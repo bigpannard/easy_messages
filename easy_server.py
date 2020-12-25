@@ -1,7 +1,7 @@
 import socket
 import threading
 
-from message import Message, ServerMessage, IntMessage, ServerMessageEnum, FORMAT
+from easy_message import EasyMessage, ServerMessage, IntMessage, ServerMessageEnum, FORMAT
 from tools import set_log, Logging_level
 
 DEFAULT_BUFFER_SIZE = 128
@@ -126,7 +126,7 @@ class EasyServer:
         msg = get_json_message_from_socket(msg_length=DEFAULT_BUFFER_SIZE, connection=connection)
         if msg:
             msg = IntMessage.decode(msg)
-            msg = Message.decode(get_json_message_from_socket(msg_length=msg.int_value, connection=connection))
+            msg = EasyMessage.decode(get_json_message_from_socket(msg_length=msg.int_value, connection=connection))
             msg_check = True
             if self.__MessageCheck_handler:
                 msg_check = self.__MessageCheck_handler(address, msg)
@@ -207,7 +207,7 @@ def message_send_to_client(address, entity, category):
     if entity == "Manu":
         mess = []
         for i in range(5):
-            mess.append(Message(f"{i} c'est bien !!!!"))
+            mess.append(EasyMessage(f"{i} c'est bien !!!!"))
         return mess
 
 

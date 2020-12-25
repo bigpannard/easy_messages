@@ -69,7 +69,7 @@ class BaseMessage:
         return dic
 
 
-class Message(BaseMessage):
+class EasyMessage(BaseMessage):
     def __init__(self, message, entity=None, category=None):
         super().__init__(message=message, entity=entity, category=category)
         self.__length = None
@@ -187,11 +187,11 @@ if __name__ == "__main__":
     msg2 = IntMessage.decode(enc)
     print(msg2.message)
 
-    msg = Message(message="fdsklfmjqsdfklqdmsjfqsdklfmqsdjfkqlsdmfjqsklmqsdjfqsdlmfdsklfmjqsdfklqdmsjfqsdklfmq"
+    msg = EasyMessage(message="fdsklfmjqsdfklqdmsjfqsdklfmqsdjfkqlsdmfjqsklmqsdjfqsdlmfdsklfmjqsdfklqdmsjfqsdklfmq"
                           "sdjfkqlsdmfjqsklmqsdjfqsdlmfdsklfmjqsdfklqdmsjfqsdklfmqsdjfkqlsdmfjqsklmqsdjfqsdlmfdsklfmjqs"
                           "dfklqdmsjfqsdklfmqsdjfkqlsdmfjqsklmqsdjfqsdlm")
     print(msg.length)
     enc = msg.encode()
     print(enc)
-    msg2 = Message.decode(enc)
+    msg2 = EasyMessage.decode(enc)
     print(msg2.message)

@@ -1,6 +1,6 @@
 import socket
 
-from message import IntMessage, Message, ServerMessage, ServerMessageEnum
+from easy_message import IntMessage, EasyMessage, ServerMessage, ServerMessageEnum
 from easy_server import DEFAULT_BUFFER_SIZE, get_json_message_from_socket
 
 
@@ -14,7 +14,7 @@ class EasyClient:
         self.__socket.connect((self.ip_address, self.port))
 
     def __read_message(self, length):
-        return Message.decode(get_json_message_from_socket(msg_length=length, connection=self.__socket))
+        return EasyMessage.decode(get_json_message_from_socket(msg_length=length, connection=self.__socket))
 
     def __read_int_message(self):
         return IntMessage.decode(get_json_message_from_socket(DEFAULT_BUFFER_SIZE, connection=self.__socket))
@@ -44,7 +44,7 @@ class EasyClient:
         Returns:
             [ServerMessage]: server message describe if the server get or not the message
         """
-        if isinstance(message, Message):
+        if isinstance(message, EasyMessage):
             self.__send(ServerMessage(ServerMessageEnum.SEND_MESS, buffer_size=DEFAULT_BUFFER_SIZE))
             self.__send_message(message)
             return self.__read_server_message()
@@ -72,7 +72,7 @@ class EasyClient:
 
 if __name__ == "__main__":
     client = EasyClient("localhost", 5050, entity="Manu")
-    msg = client.send(Message(message="<ADD_PL>Bonjour serveur c'est Manu", entity="Manu", category="Admin"))
+    msg = client.send(EasyMessage(message="<ADD_PL>Bonjour serveur c'est Manu", entity="Manu", category="Admin"))
     print(msg.message)
     client.get_messages()
     msg = client.disconnect()
