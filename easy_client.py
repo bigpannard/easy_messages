@@ -36,7 +36,7 @@ class EasyClient:
         Send ServerMessage with SEND_MESS
         Length of the message to send
         Send the message 
-        receive MSG_OK or MSG_NOK
+        receive MSG_OK or MSG_NOKKK
 
         Args:
             message (Message): Message to send at the server
