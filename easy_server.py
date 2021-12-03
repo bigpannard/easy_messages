@@ -18,7 +18,7 @@ def get_json_message_from_socket(msg_length, connection: socket):
             raise RuntimeError("socket connection broken")
         chunks.append(chunk)
         total_received = total_received + len(chunk)
-    msg = b"".join(chunks)
+    msg = "".join(chunks)
     set_log(f"get_json_message_from_socket RETURN [{msg}] - socket {connection}", level=Logging_level.debug)
     return msg
 
@@ -84,7 +84,7 @@ class EasyServer:
     def __server_message_message_4_client(self, connection, address, msg):
         set_log(f"__server_message_message_4_client {address}", level=Logging_level.info)
         if self.__MessageSendToClient_handler:
-            messages = self.__MessageSendToClient_handler(address, msg)
+            messages = self.__MessageSendToClient_handler(address, msg.entity, msg.category)
             if messages:
                 """
                     If message to sent at the client protocol is follow:
@@ -171,7 +171,7 @@ class EasyServer:
             msg = ServerMessage.decode(msg)
             if msg:
                 connected = self.__server_message_switcher(connection=connection, address=address,
-                                                           message_server_enum=msg.ServerMessageEnum, msg=msg)
+                                                           message_server_enum=msg.server_message_enum, msg=msg)
 
         set_log(f"[CLOSE CONNECTION] {address}", level=Logging_level.info)
         connection.close()

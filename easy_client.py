@@ -56,7 +56,7 @@ class EasyClient:
                                 entity="Manu", category='Admin')
         self.__send(message)
         message = self.__read_server_message()
-        if message.ServerMessageEnum == ServerMessageEnum.MSG_OK:
+        if message.server_message_enum == ServerMessageEnum.MSG_OK:
             int_msg = self.__read_int_message()
             lst_message = []
             for i in range(int_msg.int_value):
@@ -73,7 +73,11 @@ class EasyClient:
 if __name__ == "__main__":
     client = EasyClient("localhost", 5050, entity="Manu")
     msg = client.send(EasyMessage(message="<ADD_PL>Bonjour serveur c'est Manu", entity="Manu", category="Admin"))
+    msg = client.send(EasyMessage(message="TOTO<ADD_PL>Bonjour serveur c'est Manu", entity="Manu", category="Admin"))
     print(msg.message)
-    client.get_messages()
+    messages = client.get_messages()
+    if messages:
+        for mess in messages:
+            print(mess.message)
     msg = client.disconnect()
     print(msg.message)
