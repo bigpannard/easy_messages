@@ -186,7 +186,7 @@ class EasyServer:
             (connection, address) = self.__socket.accept()
             thread = threading.Thread(target=self.__handle_connection, args=(connection, address))
             thread.start()
-            set_log(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}", level=Logging_level.info)
+            set_log(f"[ACTIVE CONNECTIONS] {threading.active_count() - 1}", level=Logging_level.info)
         set_log(f"[STOP] Server is stopped", level=Logging_level.info)
 
 
@@ -206,7 +206,7 @@ def check_message(address, msg):
 def message_send_to_client(address, entity, category):
     if entity == "Manu":
         mess = []
-        for i in range(5):
+        for i in range(10):
             mess.append(EasyMessage(f"{i} c'est bien !!!!"))
         return mess
 
