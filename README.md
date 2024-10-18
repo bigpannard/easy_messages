@@ -3,7 +3,7 @@ Is a simple class to allow the management of sending message from a client to a 
 
 ## Server Side
 
-Create an instance of EasyServer with your IpAdresse and an available por
+Create an instance of EasyServer with your IpAdresse and an available port
 and wait a client connection 
 
 The server can link 3 handler:
@@ -24,7 +24,7 @@ serveur.MessageCheck_handler = message_check
 serveur.start()
 ```
 
-* MessageReceived_handler: If you link this handler, you receive the message when the server catch it. This handler return nothing adn manage 2 arguments:
+* MessageReceived_handler: If you link this handler, you receive the message when the server catch it. This handler return nothing and manage 2 arguments:
     * address: tuple value contains ip adresse and connect port to respond
     * message: Message object who should checked
 

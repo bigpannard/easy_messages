@@ -136,6 +136,9 @@ class EasyServer:
                 else:
                     connection.send(ServerMessage(server_message_enum=ServerMessageEnum.MSG_NOK,
                                                   buffer_size=DEFAULT_BUFFER_SIZE).encode())
+            else:
+                connection.send(ServerMessage(server_message_enum=ServerMessageEnum.MSG_OK,
+                                              buffer_size=DEFAULT_BUFFER_SIZE).encode())
 
             # TODO check if we need to create thread we don't need to stop the communication with the client
             if self.__MessageReceived_handler and msg_check:
@@ -190,30 +193,6 @@ class EasyServer:
         set_log(f"[STOP] Server is stopped", level=Logging_level.info)
 
 
-def manage_message(address, message):
-    print(
-        f"New message to treat from {address}\n\t entity:{message.entity}\n\t category:{message.category}"
-        f"\n\t message:{message.message}")
-
-
-def check_message(address, msg):
-    if msg.message.startswith("TOTO"):
-        return True
-    else:
-        return False
-
-
-def message_send_to_client(address, entity, category):
-    if entity == "Manu":
-        mess = []
-        for i in range(10):
-            mess.append(EasyMessage(f"{i} c'est bien !!!!"))
-        return mess
-
 
 if __name__ == "__main__":
-    s = EasyServer("localhost", 5050)
-    s.message_received_handler = manage_message
-    s.message_check_handler = check_message
-    s.message_send_to_client_handler = message_send_to_client
-    s.start()
+    pass
